@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title th:utext="#{page.title.all-users}">User list</title>
+</head>
+<body>
+<span th:utext="#{page.you.are}"></span> <strong th:inline="text"> [[${#httpServletRequest.remoteUser}]] </strong>
+<form th:action="@{/logout}" method="POST">
+    <input type="submit" th:value="#{button.logout}"/>
+</form>
+<h3 th:utext="#{page.title.all-users}">Table title</h3>
+<a th:href="@{/user}" th:if="${isuser}" th:utext="#{page.goto.user}">...</a>
+<table border="1px" aria-describedby="userList">
+    <tr>
+        <th id="id" th:utext="#{table.column.id}">Name</th>
+        <th id="name" th:utext="#{table.column.name}">Name</th>
+        <th id="lastName" th:utext="#{table.column.lastName}">Last Name</th>
+        <th id="age" th:utext="#{table.column.age}">Age</th>
+        <th id="email" th:utext="#{table.column.email}">E-mail</th>
+        <th id="role" th:utext="#{table.column.role}">Role</th>
+        <th id="buttonUpdate" th:utext="#{table.column.update}">Update</th>
+        <th id="buttonDelete" th:utext="#{table.column.delete}">Delete</th>
+    </tr>
+    <tr th:each ="u : ${listUsers}">
+        <td th:utext="${u.id}">...</td>
+        <td th:utext="${u.name}">...</td>
+        <td th:utext="${u.lastName}">...</td>
+        <td th:utext="${u.age}">...</td>
+        <td th:utext="${u.email}">...</td>
+        <td th:utext="${u.textRoles}">...</td>
+        <td>
+            <form th:method="PATCH" th:action="@{{home}/{id}(home=${urlRoot}, id=${u.getId()})}" th:object="${u}">
+                <input type="submit" name="update" th:value="#{button.update}">
+            </form>
+        </td>
+        <td>
+            <form th:method="DELETE" th:action="@{{home}/{id}(home=${urlRoot}, id=${u.getId()})}">
+                <input type="submit" name="delete" th:value="#{button.delete}">
+            </form>
+        </td>
+    </tr>
+</table>
+<form th:method="POST" th:action="@{${urlRoot}}">
+    <input type="submit" name="add" th:value="#{button.add}">
+</form>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title th:utext="#{page.title.all-users}">User list</title>
+</head>
+<body>
+<span th:utext="#{page.you.are}"></span> <strong th:inline="text"> [[${#httpServletRequest.remoteUser}]] </strong>
+<form th:action="@{/logout}" method="POST">
+    <input type="submit" th:value="#{button.logout}"/>
+</form>
+<h3 th:utext="#{page.title.show-user}">...</h3>
+<a th:href="@{/admin}" th:if="${isadmin}" th:utext="#{page.goto.admin}">...</a>
+<table border="1px" aria-describedby="userList">
+    <tr>
+        <th id="id" th:utext="#{table.column.id}">Name</th>
+        <th id="name" th:utext="#{table.column.name}">Name</th>
+        <th id="lastName" th:utext="#{table.column.lastName}">Last Name</th>
+        <th id="age" th:utext="#{table.column.age}">Age</th>
+        <th id="email" th:utext="#{table.column.email}">E-mail</th>
+        <th id="role" th:utext="#{table.column.role}">Role</th>
+    </tr>
+    <tr th:object="${user}">
+        <td th:utext="*{id}">...</td>
+        <td th:utext="*{name}">...</td>
+        <td th:utext="*{lastName}">...</td>
+        <td th:utext="*{age}">...</td>
+        <td th:utext="*{email}">...</td>
+        <td th:utext="*{textRoles}">...</td>
+    </tr>
+</table>
+</body>
+</html>
