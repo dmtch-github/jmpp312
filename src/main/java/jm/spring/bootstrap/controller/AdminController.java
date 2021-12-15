@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -60,15 +61,26 @@ public class AdminController {
 
     @GetMapping("")
     public String admin(Model model) {
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        Set<String> roles = AuthorityUtils.authorityListToSet(auth.getAuthorities());
-//        model.addAttribute("isuser", roles.contains("ROLE_USER"));
-//        model.addAttribute("listUsers", userService.getUsers());
-//        model.addAttribute(NAME_URL_ROOT, URL_ROOT);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Set<String> roles = AuthorityUtils.authorityListToSet(auth.getAuthorities());
+        model.addAttribute("isuser", roles.contains("ROLE_USER"));
+        model.addAttribute("listUsers", userService.getUsers());
+        model.addAttribute(NAME_URL_ROOT, URL_ROOT);
+        System.out.println("Зашел в индекс");
         return "index";
     }
 
+    @GetMapping("/{tab}")
+    public String tab(@PathVariable String tab) {
+        System.out.println("Зашел в таб");
+        if (Arrays.asList("tab1", "tab2")
+                .contains(tab)) {
+            System.out.println("tab = _" + tab);
+            return "_" + tab;
+        }
 
+        return "empty";
+    }
 
 
 
