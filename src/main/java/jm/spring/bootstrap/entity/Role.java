@@ -15,7 +15,7 @@ import java.util.Set;
 @Getter
 
 @Entity
-@Table(name="roles311")
+@Table(name="roles242")
 public class Role implements GrantedAuthority {
 
     @Id
@@ -27,7 +27,7 @@ public class Role implements GrantedAuthority {
     private String name;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE})
-    @JoinTable(name = "users311_roles311",
+    @JoinTable(name = "users242_roles242",
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> users;

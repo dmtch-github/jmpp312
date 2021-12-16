@@ -1,0 +1,62 @@
+﻿<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col" th:utext="#{tblusers.label.head}">
+            Label head
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th id="id" th:utext="#{user.label.id}">Name</th>
+                        <th id="name" th:utext="#{user.label.name}">Name</th>
+                        <th id="lastName" th:utext="#{user.label.lastName}">Last Name</th>
+                        <th id="age" th:utext="#{user.label.age}">Age</th>
+                        <th id="email" th:utext="#{user.label.email}">E-mail</th>
+                        <th id="role" th:utext="#{user.label.role}">Role</th>
+                        <th id="buttonUpdate" th:utext="#{tblusers.btn.edit}">Update</th>
+                        <th id="buttonDelete" th:utext="#{tblusers.btn.delete}">Delete</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr th:each ="u : ${listUsers}">
+                        <td th:utext="${u.id}">...</td>
+                        <td th:utext="${u.name}">...</td>
+                        <td th:utext="${u.lastName}">...</td>
+                        <td th:utext="${u.age}">...</td>
+                        <td th:utext="${u.email}">...</td>
+                        <td th:utext="${u.textRoles}">...</td>
+                        <td>
+<!--                            <form th:method="PATCH" th:action="@{{home}/{id}(home=${urlRoot}, id=${u.getId()})}" th:object="${u}">-->
+<!--                                <button type="button" class="btn btn-primary btn-sm" th:utext="#{tblusers.btn.edit}">-->
+<!--                                    Edit-->
+<!--                                </button>-->
+<!--                            </form>-->
+
+                            <form th:method="PATCH" th:action="@{{home}/{id}(home=${urlRoot}, id=${u.id})}" th:object="${u}">
+<!--                                <input type="submit" name="update" th:value="#{button.update}">-->
+                                <input class="btn btn-primary btn-sm" type="button" name="update" th:value="#{button.update}">
+                            </form>
+                        </td>
+                        <td>
+<!--                            <form th:method="DELETE" th:action="@{{home}/{id}(home=${urlRoot}, id=${u.getId()})}">-->
+<!--                                <button type="button" class="btn btn-danger btn-sm" th:utext="#{tblusers.btn.delete}">-->
+<!--                                    Delete-->
+<!--                                </button>-->
+<!--                            </form>-->
+                                <form th:method="DELETE" th:action="@{{home}/{id}(home=${urlRoot}, id=${u.id})}">
+<!--                                    <input type="submit" name="delete" th:value="#{button.delete}">-->
+                                    <input class="btn btn-outline-danger btn-lg" type="button" name="delete" th:value="#{button.delete}">
+                                </form>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

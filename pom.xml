@@ -15,8 +15,8 @@
     <description>03.Jmpp312Bootstrap</description>
     <properties>
         <java.version>11</java.version>
-        <bootstrap.version>4.0.0-2</bootstrap.version>
-        <webjars-locator.version>0.30</webjars-locator.version>
+        <bootstrap.version>4.6.1</bootstrap.version>
+        <webjars-locator.version>0.42</webjars-locator.version>
 <!--        <lombok.version>1.18.2</lombok.version>-->
     </properties>
 

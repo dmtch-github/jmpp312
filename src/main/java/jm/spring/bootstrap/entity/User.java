@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Getter
 
 @Entity
-@Table(name="users311")
+@Table(name="users242")
 public class User implements UserDetails {
 
     @Id
@@ -53,7 +53,7 @@ public class User implements UserDetails {
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE},
             fetch = FetchType.EAGER)
-    @JoinTable(name = "users311_roles311",
+    @JoinTable(name = "users242_roles242",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;

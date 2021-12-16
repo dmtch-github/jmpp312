@@ -64,21 +64,28 @@ public class AdminController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Set<String> roles = AuthorityUtils.authorityListToSet(auth.getAuthorities());
         model.addAttribute("isuser", roles.contains("ROLE_USER"));
-        model.addAttribute("listUsers", userService.getUsers());
         model.addAttribute(NAME_URL_ROOT, URL_ROOT);
         System.out.println("Зашел в индекс");
         return "index";
     }
 
     @GetMapping("/{tab}")
-    public String tab(@PathVariable String tab) {
-        System.out.println("Зашел в таб");
-        if (Arrays.asList("tab1", "tab2")
-                .contains(tab)) {
-            System.out.println("tab = _" + tab);
-            return "_" + tab;
-        }
+    public String tab(@PathVariable String tab, Model model) {
+        model.addAttribute(NAME_URL_ROOT, URL_ROOT);
+        switch(tab) {
+            case "tab1":
+                System.out.println("Зашел в таб1");
+                model.addAttribute("listUsers", userService.getUsers());
 
+                return "_table-admin";
+
+            case "tab2":
+                System.out.println("Зашел в таб2");
+                User user = new User();
+                user.setTextRoles(Roles.USER);
+                model.addAttribute("user", user);
+                return "_new_user";
+        }
         return "empty";
     }
 
@@ -91,7 +98,8 @@ public class AdminController {
     @PostMapping(value = "/{id}", params = "delete")
     public String deleteUser(ModelMap model,
                              @PathVariable("id") int id) {
-        userService.deleteUser(id);
+        System.out.println("Зашел в УДаление Юзера");
+//        userService.deleteUser(id);
         return COMMAND_REDIRECT + URL_ROOT;
     }
 
@@ -102,9 +110,11 @@ public class AdminController {
     @PostMapping(value = "/{id}", params = "update")
     public String updateUser(@PathVariable("id") int id,
                              Model model) {
-        model.addAttribute("user", userService.getUser(id));
-        model.addAttribute(NAME_URL_ROOT, URL_ROOT);
-        return "edit-user";
+        System.out.println("Зашел в Редактирование Юзера");
+//        model.addAttribute("user", userService.getUser(id));
+//        model.addAttribute(NAME_URL_ROOT, URL_ROOT);
+//        return "edit-user";
+        return "empty";
     }
 
     /**
