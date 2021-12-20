@@ -15,21 +15,30 @@ public class UserServiceImp implements UserService {
     @Autowired
     private UserDao userDao;
 
+    private List<User> users;
+    private boolean reloadUsers = true;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userDao.loadUserByUsername(username);
     }
 
     public List<User> getUsers() {
-        return userDao.getUsers();
+        if(reloadUsers) {
+            users = userDao.getUsers();
+            reloadUsers = false;
+        }
+        return users;
     }
 
     public void saveUser(User user) {
         userDao.saveUser(user);
+        reloadUsers = true;
     }
 
     public void deleteUser(int id) {
         userDao.deleteUser(id);
+        reloadUsers = true;
     }
 
     public User getUser(int id) {

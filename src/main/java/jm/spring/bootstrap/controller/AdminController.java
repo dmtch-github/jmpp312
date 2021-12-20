@@ -26,7 +26,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admin2")
 public class AdminController {
 
     public static final String URL_ROOT = "/admin";
@@ -81,13 +81,46 @@ public class AdminController {
 
             case "tab2":
                 System.out.println("Зашел в таб2");
-                User user = new User();
-                user.setTextRoles(Roles.USER);
-                model.addAttribute("user", user);
+                model.addAttribute("user", new User());
                 return "_new_user";
         }
         return "empty";
     }
+
+
+    /**
+     * Сохраняет данные пользователя в БД,
+     * динамически меняет права авторизованного администратора
+     * и перенаправляет на главную страницу
+     */
+    @PostMapping(value = "", params = "save")
+    public String saveUser(@Valid @ModelAttribute("user") User user,
+                           BindingResult bindingResult) {
+
+        System.out.println("Зашел в saveUser " + user);
+
+        if(bindingResult.hasErrors()) {
+            //return "_new_user";
+            return COMMAND_REDIRECT + URL_ROOT + "/tab2";
+        }
+
+        System.out.println("Прошел биндинг и вышел на редирект");
+        userService.saveUser(user);
+        //для текущего пользователя делаем динамическую авторизацию: смена прав
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(((UserDetails) auth.getPrincipal()).getUsername().equals(user.getUsername())) {
+            List<String> newRoles = user.getRoles().stream()
+                    .map(Role::getName)
+                    .collect(Collectors.toList());
+            List<GrantedAuthority> auths = getAuthorities(newRoles);
+            Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(),auth.getCredentials(),auths);
+            SecurityContextHolder.getContext().setAuthentication(newAuth);
+        }
+        return COMMAND_REDIRECT + URL_ROOT;
+    }
+
+
+
 
 
 
@@ -124,36 +157,13 @@ public class AdminController {
     @PostMapping(value = "", params = "add")
     public String addUser(ModelMap model) {
         User user = new User();
-        user.setTextRoles(Roles.USER);
+//        user.setTextRoles(Roles.USER);
+        user.setEnumRoles(new Roles[]{Roles.USER});
         model.addAttribute("user", user);
         model.addAttribute(NAME_URL_ROOT, URL_ROOT);
         return "edit-user";
     }
 
-    /**
-     * Сохраняет данные пользователя в БД,
-     * динамически меняет права авторизованного администратора
-     * и перенаправляет на главную страницу
-     */
-    @PostMapping(value = "", params = "save")
-    public String saveUser(@Valid @ModelAttribute("user") User user,
-                           BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
-            return "edit-user";
-        }
-        userService.saveUser(user);
-        //для текущего пользователя делаем динамическую авторизацию: смена прав
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(((UserDetails) auth.getPrincipal()).getUsername().equals(user.getUsername())) {
-            List<String> newRoles = user.getRoles().stream()
-                    .map(Role::getName)
-                    .collect(Collectors.toList());
-            List<GrantedAuthority> auths = getAuthorities(newRoles);
-            Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(),auth.getCredentials(),auths);
-            SecurityContextHolder.getContext().setAuthentication(newAuth);
-        }
-        return COMMAND_REDIRECT + URL_ROOT;
-    }
 
     private List<GrantedAuthority> getAuthorities(List<String> roles) {
         List<GrantedAuthority> auths = new ArrayList<>();

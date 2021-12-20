@@ -4,58 +4,117 @@
 <head>
 <!--    <meta charset="UTF-8"/>-->
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title th:utext="#{page.title.all-users}">Admin panel</title>
+    <title>Admin panel</title>
+<!--    th:utext="#{page.title.all-users}-->
 
+    <link th:rel="stylesheet" th:href="@{assets/bootstrap-select-1.13.14/dist/css/bootstrap-select.css}"/>
+<!--  Корректность неизвестна  <link th:rel="stylesheet" th:href="@{webjars/bootstrap-select/css/bootstrap-select.css} "/>-->
     <link th:rel="stylesheet" th:href="@{webjars/bootstrap/4.6.1/css/bootstrap.min.css} "/>
+
+<!--    <link th:rel="stylesheet" th:href="@{assets/bootstrap-select-1.13.9/dist/css/bootstrap-select.css}"/>-->
+<!--    <link th:rel="stylesheet" th:href="@{webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>-->
+
+
 </head>
 <body>
 
-
-
-
-
-<!-- Navigation -->
-<nav class="navbar navbar-dark bg-dark static-top">
-    <div class="container">
-        <div class="row justify-content-between">
-            <div class="col-md-auto">
-                <strong class="navbar-brand" th:inline="text">[[${#httpServletRequest.remoteUser}]]</strong>
-                <label class="navbar-brand" th:utext="#{main.title.roles} + ' Роли пока неизвестны'">..</label>
+<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="myModal"
+     role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Delete Record</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal"
+                        type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class="col-md-auto">
-                <a class="nav-link" href="#" th:utext="#{main.button.logout}">Logout</a>
+            <div class="modal-body">
+                <p class="alert alert-danger">
+                    Are you sure you want to delete this country?
+                </p>
             </div>
-        </div>
-<!--        <span th:utext="#{page.you.are}"></span> <strong th:inline="text"> [[${#httpServletRequest.remoteUser}]] </strong>-->
-<!--        <form th:action="@{/logout}" method="POST">-->
-<!--            <input type="submit" th:value="#{button.logout}"/>-->
-<!--        </form>-->
-
-    </div>
-</nav>
-
-<div class="container">
-
-    <div class="row">
-        <div class="col">
-            <ul class="nav nav-tabs mt-5" id="myTabs">
-                <li class="nav-item"><a href="#tab1" data-url="/admin/tab1" class="nav-link active" th:utext="#{tab.all-users}">Tab1</a></li>
-                <li class="nav-item"><a href="#tab2" data-url="/admin/tab2" class="nav-link" th:utext="#{tab.add-user}">Tab2</a></li>
-            </ul>
-
-            <div class="tab-content pt-3">
-                <div class="tab-pane active" id="tab1">Active panel</div>
-                <div class="tab-pane" id="tab2"></div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal"
+                        type="button">Close
+                </button>
+                <a class="btn btn-danger" href="" id="delRef">Delete</a>
             </div>
         </div>
     </div>
-
 </div>
+
+
+
+
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-between sticky-top">
+        <div class="navbar-brand col-md-auto">
+            <strong th:inline="text">[[${#httpServletRequest.remoteUser}]]</strong>
+            <span th:utext="#{main.title.roles}">..</span>
+            <span>ADMIN USER</span>
+        </div>
+        <div class="navbar-brand col-md-auto">
+            <a href="/login?logout" class="nav-link text-light" th:utext="#{main.button.logout}">Logout</a>
+        </div>
+    </nav>
+</header>
+
+<div class="row">
+    <!-- начало ВЕРТИКАЛЬНАЯ КОЛОНКА -->
+    <aside class="col-1 bg-light">
+
+    </aside>
+    <!-- конец ВЕРТИКАЛЬНАЯ КОЛОНКА -->
+
+    <!-- начало ИНФОРМАЦИОННАЯ ПАНЕЛЬ -->
+    <section class="col">
+        <h3 class="row mt-2 ml-2" th:utext="#{panel.title.admin}"></h3>
+        <div class="row">
+            <div class="col">
+                <!-- начало НАЗВАНИЯ ТАБОВ -->
+                <ul class="nav nav-tabs mt-3" id="myTabs">
+                    <li class="nav-item">
+                        <a href="#tab1" data-url="/admin/tab1" class="nav-link active" th:utext="#{tab.tblusers.name}">Tab1</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#tab2" data-url="/admin/tab2" class="nav-link" th:utext="#{tab.adduser.name}">Tab2</a>
+                    </li>
+                </ul>
+                <!-- конец НАЗВАНИЯ ТАБОВ -->
+
+                <!-- начало СОДЕРЖИМОЕ ТАБОВ -->
+                <div class="tab-content pt-3">
+                    <div class="tab-pane active" id="tab1">
+                        Active panel
+                    </div>
+
+                    <div class="tab-pane" id="tab2">
+
+                    </div>
+
+                </div>
+                <!-- конец СОДЕРЖИМОЕ ТАБОВ -->
+            </div>
+        </div>
+    </section>
+    <!-- конец ИНФОРМАЦИОННАЯ ПАНЕЛЬ -->
+</div>
+
+
 
 
 <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<!--<script th:src="@{/webjars/bootstrap-select/js/bootstrap-select.js}"></script>-->
+<script th:src="@{assets/bootstrap-select-1.13.14/dist/js/bootstrap-select.js}"></script>
+
+<!--<script th:src="@{/webjars/jquery/jquery.min.js}"></script>-->
+<!--<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>-->
+<!--<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>-->
+<!--<script th:src="@{assets/bootstrap-select-1.13.9/dist/js/bootstrap-select.js}"></script>-->
+
 
 <script>
     $('#myTabs a').click(function (e) {
@@ -73,6 +132,37 @@
 
     // load first tab content
     $('#tab1').load($('.nav-link.active').attr("data-url"), function (result) {
+    });
+
+
+    $(document).ready(function () {
+
+        // $('.nBtn, .table .eBtn').on('click', function (event) {
+        //     event.preventDefault();
+        //     var href = $(this).attr('href');
+        //     var text = $(this).text(); //return New or Edit
+        //
+        //     if (text === 'Edit') {
+        //         $.get(href, function (country, status) {
+        //             $('.myForm #id').val(country.id);
+        //             $('.myForm #name').val(country.name);
+        //             $('.myForm #capital').val(country.capital);
+        //         });
+        //         $('.myForm #exampleModal').modal();
+        //     } else {
+        //         $('.myForm #id').val('');
+        //         $('.myForm #name').val('');
+        //         $('.myForm #capital').val('');
+        //         $('.myForm #exampleModal').modal();
+        //     }
+        // });
+
+        $('.table .delBtn').on('click', function (event) {
+            event.preventDefault();
+            var href = $(this).attr('href');
+            $('#myModal #delRef').attr('href', href);
+            $('#myModal').modal();
+        });
     });
 
 </script>

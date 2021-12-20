@@ -1,9 +1,18 @@
-﻿<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<div class="container-fluid">
-    <div class="row">
-        <div class="col" th:utext="#{tblusers.label.head}">
+﻿<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<!--      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"-->
+<head>
+</head>
+
+<body>
+
+<div th:fragment="table-admin">
+    <div class="row mt-2 ml-2">
+        <h4 th:utext="#{tblusers.label.head}">
             Label head
-        </div>
+        </h4>
     </div>
 
     <div class="row">
@@ -29,29 +38,30 @@
                         <td th:utext="${u.lastName}">...</td>
                         <td th:utext="${u.age}">...</td>
                         <td th:utext="${u.email}">...</td>
-                        <td th:utext="${u.textRoles}">...</td>
                         <td>
-<!--                            <form th:method="PATCH" th:action="@{{home}/{id}(home=${urlRoot}, id=${u.getId()})}" th:object="${u}">-->
-<!--                                <button type="button" class="btn btn-primary btn-sm" th:utext="#{tblusers.btn.edit}">-->
-<!--                                    Edit-->
-<!--                                </button>-->
-<!--                            </form>-->
-
-                            <form th:method="PATCH" th:action="@{{home}/{id}(home=${urlRoot}, id=${u.id})}" th:object="${u}">
-<!--                                <input type="submit" name="update" th:value="#{button.update}">-->
-                                <input class="btn btn-primary btn-sm" type="button" name="update" th:value="#{button.update}">
-                            </form>
+                            <span th:each="role : ${u.enumRoles}"
+                                  th:utext="${role} + ' '">
+                            </span>
                         </td>
                         <td>
-<!--                            <form th:method="DELETE" th:action="@{{home}/{id}(home=${urlRoot}, id=${u.getId()})}">-->
-<!--                                <button type="button" class="btn btn-danger btn-sm" th:utext="#{tblusers.btn.delete}">-->
-<!--                                    Delete-->
-<!--                                </button>-->
+                            <a class="btn btn-primary editBtn" th:href="@{{home}/{id}(home=${urlRoot}, id=${u.id})}" th:object="${u}"
+                               name="update" th:value="#{tblusers.btn.edit}">Edit
+                            </a>
+<!--                            <form th:method="PATCH" th:action="@{{home}/{id}(home=${urlRoot}, id=${u.id})}" th:object="${u}">-->
+<!--                                <input class="btn btn-primary btn-sm" type="button" name="update" th:value="#{tblusers.btn.edit}">-->
 <!--                            </form>-->
-                                <form th:method="DELETE" th:action="@{{home}/{id}(home=${urlRoot}, id=${u.id})}">
-<!--                                    <input type="submit" name="delete" th:value="#{button.delete}">-->
-                                    <input class="btn btn-outline-danger btn-lg" type="button" name="delete" th:value="#{button.delete}">
-                                </form>
+                        </td>
+                        <td>
+<!--                            <form th:method="DELETE" th:action="@{{home}/{id}(home=${urlRoot}, id=${u.id})}">-->
+<!--                                <input class="btn btn-danger btn-sm" type="button" name="delete" th:value="#{tblusers.btn.delete}">-->
+<!--                            </form>-->
+                            <a class="btn btn-danger delBtn" th:href="@{{home}/delete/{id}(home=${urlRoot}, id=${u.id})}" th:object="${u}"
+                                name="delete" th:value="#{tblusers.btn.delete}">Delete
+                            </a>
+                            <a class="btn btn-danger delBtn" th:href="@{/admin/delete/1}">Delete</a>
+                            <a class="btn btn-danger delBtn" data-toggle="modal" hdata-target="#myModal"   th:href="@{/admin/delete/1}">Delete</a>
+
+
 
                         </td>
                     </tr>
@@ -60,3 +70,7 @@
         </div>
     </div>
 </div>
+
+</body>
+
+</html>

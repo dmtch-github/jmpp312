@@ -1,33 +1,81 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title th:utext="#{page.title.all-users}">User list</title>
+    <title th:utext="#{panel.title.user}">Admin panel</title>
+    <!--    th:utext="#{page.title.all-users}-->
+
+    <div th:replace="components :: header-css"></div>
 </head>
 <body>
-<span th:utext="#{page.you.are}"></span> <strong th:inline="text"> [[${#httpServletRequest.remoteUser}]] </strong>
-<form th:action="@{/logout}" method="POST">
-    <input type="submit" th:value="#{button.logout}"/>
-</form>
-<h3 th:utext="#{page.title.show-user}">...</h3>
-<a th:href="@{/admin}" th:if="${isadmin}" th:utext="#{page.goto.admin}">...</a>
-<table border="1px" aria-describedby="userList">
-    <tr>
-        <th id="id" th:utext="#{table.column.id}">Name</th>
-        <th id="name" th:utext="#{table.column.name}">Name</th>
-        <th id="lastName" th:utext="#{table.column.lastName}">Last Name</th>
-        <th id="age" th:utext="#{table.column.age}">Age</th>
-        <th id="email" th:utext="#{table.column.email}">E-mail</th>
-        <th id="role" th:utext="#{table.column.role}">Role</th>
-    </tr>
-    <tr th:object="${user}">
-        <td th:utext="*{id}">...</td>
-        <td th:utext="*{name}">...</td>
-        <td th:utext="*{lastName}">...</td>
-        <td th:utext="*{age}">...</td>
-        <td th:utext="*{email}">...</td>
-        <td th:utext="*{textRoles}">...</td>
-    </tr>
-</table>
+<div class="container-fluid">
+
+    <header>
+        <div th:replace="components :: header"></div>
+    </header>
+
+    <div class="row">
+        <!-- начало ВЕРТИКАЛЬНАЯ КОЛОНКА -->
+        <aside class="col-2 bg-light">
+            <div th:replace="components :: menu-role"></div>
+        </aside>
+        <!-- конец ВЕРТИКАЛЬНАЯ КОЛОНКА -->
+
+        <!-- начало ИНФОРМАЦИОННАЯ ПАНЕЛЬ -->
+        <section class="col">
+            <h3 class="row mt-2 ml-2" th:utext="#{panel.title.user}"></h3>
+            <div class="row">
+                <div class="col">
+
+                    <div class="container-fluid">
+                        <div class="row mt-2 ml-2">
+                            <h4 th:utext="#{tblsingle.label.head}">
+                                Label head
+                            </h4>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th id="id" th:utext="#{user.label.id}">id</th>
+                                        <th id="name" th:utext="#{user.label.name}">Name</th>
+                                        <th id="lastName" th:utext="#{user.label.lastName}">Last Name</th>
+                                        <th id="age" th:utext="#{user.label.age}">Age</th>
+                                        <th id="email" th:utext="#{user.label.email}">E-mail</th>
+                                        <th id="role" th:utext="#{user.label.role}">Role</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td th:utext="${user.id}">...</td>
+                                        <td th:utext="${user.name}">...</td>
+                                        <td th:utext="${user.lastName}">...</td>
+                                        <td th:utext="${user.age}">...</td>
+                                        <td th:utext="${user.email}">...</td>
+                                        <td>
+                                            <span th:each="role : ${user.enumRoles}"
+                                                  th:utext="${role} + ' '">
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <!-- конец ИНФОРМАЦИОННАЯ ПАНЕЛЬ -->
+    </div>
+</div> <!-- container-fluid -->
+
+
+<div th:replace="components :: footer-script"></div>
+
 </body>
 </html>

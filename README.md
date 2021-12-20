@@ -4,6 +4,10 @@
 <li>Задать в проп пользователя Спринга</li>
 <li>Продолжение здесь https://bootstrap-4.ru/docs/4.6/components/navs/#javascript-behavior</li>
 
+**2021.12.19**
+<li>Перевел User.textRoles из String в enum[]</li>
+<li>Скопировал библиотеку bootstrap-select в pom.xml</li>
+
 **2021.12.16**
 <li>Подключить переменную Thlf из вне в значение URL бутстрапа</li>
 

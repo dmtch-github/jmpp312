@@ -49,7 +49,7 @@ public class User implements UserDetails {
     private String password;
 
     @Transient
-    private String textRoles;
+    private Roles[] enumRoles;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE},
             fetch = FetchType.EAGER)
@@ -104,15 +104,16 @@ public class User implements UserDetails {
     }
 
     /**
-     * Преобразует названия ролей в строку
-     * для отображения на сайте
+     * Преобразует роли в enum[]
+     * Вход ROLE_USER
+     * Выход USER
      */
-    public void rolesToText() {
-        textRoles = roles.stream()
-                .map(Role::getName)
-                .map(x -> x.replace(Roles.ROLE_PREFIX,""))
+    public void rolesToEnum() {
+        enumRoles = roles.stream()
+                .map(x -> x.getName().replace(Roles.ROLE_PREFIX,""))
+                .map(x -> Roles.valueOf(x))
                 .sorted()
-                .collect(Collectors.joining(" "));
+                .toArray(Roles[]::new);
     }
 
     @Override
@@ -124,7 +125,7 @@ public class User implements UserDetails {
                 ", lastName='" + lastName + '\'' +
                 ", age=" + age +
                 ", password='" + password + '\'' +
-                ", textRoles='" + textRoles + '\'' +
+                ", enumRoles='" + enumRoles + '\'' +
                 ", roles=" + roles +
                 '}';
     }

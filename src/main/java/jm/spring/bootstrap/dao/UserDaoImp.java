@@ -38,15 +38,15 @@ public class UserDaoImp implements UserDao {
     public List<User> getUsers() {
         List<User> users = userRepository.findAll();
         for (User u: users) {
-            u.rolesToText(); //преобразуем роли в текстовое описание
+            u.rolesToEnum(); //преобразуем роли в текстовое описание
         }
         return users;
     }
 
     @Override
     public void saveUser(User user) {
-        String[] namesRole = Arrays.stream(user.getTextRoles().split(" "))
-            .map(String::toUpperCase)
+        String[] namesRole = Arrays.stream(user.getEnumRoles())
+            .map(Roles::toString)
             .filter(x -> x.equals(Roles.ADMIN) || x.equals(Roles.USER))
             .distinct()
             .map(x -> Roles.ROLE_PREFIX+x)
@@ -81,14 +81,18 @@ public class UserDaoImp implements UserDao {
         Optional<User> optional = userRepository.findById(id);
         if(optional.isPresent()) {
             user = optional.get();
-            user.rolesToText();
+            user.rolesToEnum();
         }
         return user;
     }
 
     @Override
     public User getUserByName(String username) {
-        return userRepository.findUserByEmail(username);
+        User user = userRepository.findUserByEmail(username);
+        if(user != null) {
+            user.rolesToEnum();
+        }
+        return user;
     }
 
 
