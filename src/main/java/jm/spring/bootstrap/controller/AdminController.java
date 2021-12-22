@@ -20,13 +20,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/admin2")
+@RequestMapping("/admin")
 public class AdminController {
 
     public static final String URL_ROOT = "/admin";
@@ -63,10 +62,12 @@ public class AdminController {
     public String admin(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Set<String> roles = AuthorityUtils.authorityListToSet(auth.getAuthorities());
-        model.addAttribute("isuser", roles.contains("ROLE_USER"));
+        String stringRoles = roles.stream().map(x -> x.replace(Roles.ROLE_PREFIX,"")).sorted().collect(Collectors.joining(" ","",""));
+        model.addAttribute("stringRoles", stringRoles);
         model.addAttribute(NAME_URL_ROOT, URL_ROOT);
+//        model.addAttribute("listUsers", userService.getUsers());
         System.out.println("Зашел в индекс");
-        return "index";
+        return "admin";
     }
 
     @GetMapping("/{tab}")
@@ -84,7 +85,7 @@ public class AdminController {
                 model.addAttribute("user", new User());
                 return "_new_user";
         }
-        return "empty";
+        return "del_empty";
     }
 
 
@@ -147,7 +148,7 @@ public class AdminController {
 //        model.addAttribute("user", userService.getUser(id));
 //        model.addAttribute(NAME_URL_ROOT, URL_ROOT);
 //        return "edit-user";
-        return "empty";
+        return "del_empty";
     }
 
     /**
@@ -161,7 +162,7 @@ public class AdminController {
         user.setEnumRoles(new Roles[]{Roles.USER});
         model.addAttribute("user", user);
         model.addAttribute(NAME_URL_ROOT, URL_ROOT);
-        return "edit-user";
+        return "del_edit-user";
     }
 
 

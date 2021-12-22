@@ -1,72 +1,78 @@
 <!DOCTYPE HTML>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title th:utext="#{panel.title.user}">Admin panel</title>
-    <!--    th:utext="#{page.title.all-users}-->
+    <title th:utext="#{panel.title.user}">User panel</title>
 
-    <div th:replace="components :: header-css"></div>
+    <link th:rel="stylesheet" th:href="@{assets/bootstrap-select-1.13.14/dist/css/bootstrap-select.css}"/>
+    <link th:rel="stylesheet" th:href="@{webjars/bootstrap/4.6.1/css/bootstrap.min.css} "/>
 </head>
 <body>
 <div class="container-fluid">
 
     <header>
-        <div th:replace="components :: header"></div>
+        <nav class="navbar navbar-expand navbar-dark bg-dark justify-content-between sticky-top">
+            <div sec:authorize="isAuthenticated()" class="navbar-brand col-md-auto">
+                <strong sec:authentication="name">NAME</strong>
+                <span th:utext="#{main.title.roles}">..</span>
+                <span th:utext="${stringRoles}">ROLES</span>
+            </div>
+            <div class="navbar-brand col-md-auto">
+                <a th:href="@{logout}" class="nav-link text-light" th:utext="#{main.button.logout}">Logout</a>
+            </div>
+        </nav>
     </header>
 
     <div class="row">
         <!-- начало ВЕРТИКАЛЬНАЯ КОЛОНКА -->
         <aside class="col-2 bg-light">
-            <div th:replace="components :: menu-role"></div>
+            <div sec:authorize="isAuthenticated()" class="row row-cols-1 text-center">
+                <a class="btn btn-block btn-light" sec:authorize="hasRole('ADMIN')" role="button" th:href="@{/admin}">ADMIN</a>
+                <a class="btn btn-block btn-primary" role="button" th:href="@{/user}">USER</a>
+            </div>
         </aside>
         <!-- конец ВЕРТИКАЛЬНАЯ КОЛОНКА -->
 
         <!-- начало ИНФОРМАЦИОННАЯ ПАНЕЛЬ -->
         <section class="col">
-            <h3 class="row mt-2 ml-2" th:utext="#{panel.title.user}"></h3>
-            <div class="row">
-                <div class="col">
+            <h3 class="row mt-3 pl-2" th:utext="#{panel.title.user}"></h3>
+            <div class="row mt-3 pl-4">
+                <h4 th:utext="#{tblsingle.label.head}">
+                    Label head
+                </h4>
+            </div>
 
-                    <div class="container-fluid">
-                        <div class="row mt-2 ml-2">
-                            <h4 th:utext="#{tblsingle.label.head}">
-                                Label head
-                            </h4>
-                        </div>
+            <div class="row py-4">
+                <div class="col-md-12">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th id="id" th:utext="#{user.label.id}">id</th>
+                            <th id="name" th:utext="#{user.label.name}">Name</th>
+                            <th id="lastName" th:utext="#{user.label.lastName}">Last Name</th>
+                            <th id="age" th:utext="#{user.label.age}">Age</th>
+                            <th id="email" th:utext="#{user.label.email}">E-mail</th>
+                            <th id="role" th:utext="#{user.label.role}">Role</th>
+                        </tr>
+                        </thead>
 
-                        <div class="row">
-                            <div class="col-md-12">
-                                <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th id="id" th:utext="#{user.label.id}">id</th>
-                                        <th id="name" th:utext="#{user.label.name}">Name</th>
-                                        <th id="lastName" th:utext="#{user.label.lastName}">Last Name</th>
-                                        <th id="age" th:utext="#{user.label.age}">Age</th>
-                                        <th id="email" th:utext="#{user.label.email}">E-mail</th>
-                                        <th id="role" th:utext="#{user.label.role}">Role</th>
-                                    </tr>
-                                    </thead>
-
-                                    <tbody>
-                                    <tr>
-                                        <td th:utext="${user.id}">...</td>
-                                        <td th:utext="${user.name}">...</td>
-                                        <td th:utext="${user.lastName}">...</td>
-                                        <td th:utext="${user.age}">...</td>
-                                        <td th:utext="${user.email}">...</td>
-                                        <td>
-                                            <span th:each="role : ${user.enumRoles}"
-                                                  th:utext="${role} + ' '">
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
+                        <tbody>
+                        <tr>
+                            <td th:utext="${user.id}">...</td>
+                            <td th:utext="${user.name}">...</td>
+                            <td th:utext="${user.lastName}">...</td>
+                            <td th:utext="${user.age}">...</td>
+                            <td th:utext="${user.email}">...</td>
+                            <td>
+                                <span th:each="role : ${user.enumRoles}"
+                                      th:utext="${role} + ' '">
+                                </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>
@@ -74,8 +80,10 @@
     </div>
 </div> <!-- container-fluid -->
 
-
-<div th:replace="components :: footer-script"></div>
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{assets/bootstrap-select-1.13.14/dist/js/bootstrap-select.js}"></script>
 
 </body>
 </html>

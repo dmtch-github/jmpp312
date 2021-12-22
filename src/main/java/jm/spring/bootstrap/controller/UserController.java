@@ -33,7 +33,7 @@ public class UserController {
         Set<String> roles = AuthorityUtils.authorityListToSet(auth.getAuthorities());
         String stringRoles = roles.stream().map(x -> x.replace(Roles.ROLE_PREFIX,"")).sorted().collect(Collectors.joining(" ","",""));
         model.addAttribute("stringRoles", stringRoles);
-        model.addAttribute(NAME_URL_ROOT, URL_ROOT);
+//        model.addAttribute(NAME_URL_ROOT, URL_ROOT);
         model.addAttribute("user", userService.getUserByName(auth.getName()));
         return "user";
     }

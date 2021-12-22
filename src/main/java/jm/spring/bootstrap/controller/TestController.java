@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admin3")
 public class TestController {
 
     public static final String URL_ROOT = "/admin";
@@ -48,7 +47,7 @@ public class TestController {
         model.addAttribute("listUsers", userService.getUsers());
 
         System.out.println("Зашел в индекс");
-        return "test";
+        return "del_test";
     }
 
     @GetMapping("/{tab}")
@@ -65,7 +64,7 @@ public class TestController {
                 model.addAttribute("user", new User());
                 return "_new_user";
         }
-        return "empty";
+        return "del_empty";
     }
 
 
@@ -129,7 +128,7 @@ public class TestController {
 //        model.addAttribute("user", userService.getUser(id));
 //        model.addAttribute(NAME_URL_ROOT, URL_ROOT);
 //        return "edit-user";
-        return "empty";
+        return "del_empty";
     }
 
     /**
@@ -143,7 +142,7 @@ public class TestController {
         user.setEnumRoles(new Roles[]{Roles.USER});
         model.addAttribute("user", user);
         model.addAttribute(NAME_URL_ROOT, URL_ROOT);
-        return "edit-user";
+        return "del_edit-user";
     }
 
 

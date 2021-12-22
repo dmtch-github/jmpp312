@@ -16,13 +16,11 @@
 
     <div th:fragment="header">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-between sticky-top">
-            <div sec:authorize="isAuthenticated()" class="navbar-brand col-md-auto">
-                <strong sec:authentication="name">NAME</strong>
+            <div th:text="${#authentication.isAuthenticated()}" class="navbar-brand col-md-auto">
+                <strong th:text="${#authentication.name}">NAME</strong>
                 <span th:utext="#{main.title.roles}">..</span>
                 <span th:utext="${stringRoles}">ROLES</span>
-                <!--                <strong th:text="${#authentication.name}"> NAME AGAIN </strong>-->
 <!--                <span th:text="${#authorization.url('/admin')}"> URL </span>-->
-                <!--  не показывает свойства объекта              <span sec:authentication="prop">PROP</span>-->
                 <!-- <span sec:authentication="principal.authorities">ROLES</span> TODO здесь выводит сущности ролей из БД, надо преобразовывать в строку -->
             </div>
             <div class="navbar-brand col-md-auto">
@@ -34,7 +32,8 @@
     <div th:fragment="menu-role">
         <div sec:authorize="isAuthenticated()" class="row row-cols-1 text-center">
 
-                <div sec:authorize="hasRole('ADMIN')" class="col btn-warning text-center">
+<!--            sec:authorize="hasRole('ADMIN')"-->
+            <div th:text="${#authentication.getAuthorities().contains('ADMIN')}" class="col btn-warning text-center">
                     <a th:if="${urlRoot == '/admin'}" class="btn btn-block btn-primary" role="button" th:href="@{/admin}">ADMIN</a>
                     <a th:if="${urlRoot != '/admin'}" class="btn btn-block btn-light" role="button" th:href="@{/admin}">ADMIN</a>
                 </div>

@@ -5,7 +5,7 @@
     <title th:utext="#{panel.title.admin}">Admin panel</title>
     <!--    th:utext="#{page.title.all-users}-->
 
-    <div th:replace="components :: header-css"></div>
+    <div th:replace="del_components :: header-css"></div>
 </head>
 <body>
 
@@ -94,13 +94,13 @@
 
 
     <header>
-        <div th:replace="components :: header"></div>
+        <div th:replace="del_components :: header"></div>
     </header>
 
     <div class="row">
         <!-- начало ВЕРТИКАЛЬНАЯ КОЛОНКА -->
         <aside class="col-2 bg-light">
-            <div th:replace="components :: menu-role"></div>
+            <div th:replace="del_components :: menu-role"></div>
         </aside>
         <!-- конец ВЕРТИКАЛЬНАЯ КОЛОНКА -->
 
@@ -143,7 +143,7 @@
 </div> <!-- container-fluid -->
 
 
-<div th:replace="components :: footer-script"></div>
+<div th:replace="del_components :: footer-script"></div>
 
 <script>
     $('#myTabs a').click(function (e) {
