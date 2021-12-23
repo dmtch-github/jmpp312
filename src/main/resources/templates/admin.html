@@ -99,25 +99,10 @@
                                                 </span>
                                             </td>
                                             <td>
-<!--                                                <a class="btn btn-primary" href="#myModal" data-toggle="modal" th:object="${u}" th:value="#{tblusers.btn.edit}">Edit</a>-->
-                                                <a class="btn btn-primary editBtn" th:href="@{{home}/findOne/{id}(home=${urlRoot}, id=${u.id})}" > Edit JS</a>
-                                                <a class="btn btn-primary editBtn" th:href="@{{home}/{id}(home=${urlRoot}, id=${u.id})}" > Edit JS</a>
-<!--                                                <a class="btn btn-primary eBtn" th:href="@{findOne/(id=${country.id})}">Edit</a>-->
-
-
+                                                <a class="btn btn-primary btnEdit" th:href="@{{home}/findOne/{id}(home=${urlRoot}, id=${u.id})}" th:utext="#{tblusers.btn.edit}">Edit</a>
                                             </td>
                                             <td>
-                                                <!--                            <form th:method="DELETE" th:action="@{{home}/{id}(home=${urlRoot}, id=${u.id})}">-->
-                                                <!--                                <input class="btn btn-danger btn-sm" type="button" name="delete" th:value="#{tblusers.btn.delete}">-->
-                                                <!--                            </form>-->
-                                                <a class="btn btn-danger delBtn" th:href="@{{home}/delete/{id}(home=${urlRoot}, id=${u.id})}" th:object="${u}"
-                                                   name="delete" th:value="#{tblusers.btn.delete}">Delete
-                                                </a>
-                                                <a class="btn btn-danger delBtn" th:href="@{/admin/delete/1}">Delete</a>
-                                                <a class="btn btn-danger delBtn" data-toggle="modal" hdata-target="#myModal"   th:href="@{/admin/delete/1}">Delete</a>
-
-
-
+                                                <a class="btn btn-danger btnDelete" th:href="@{{home}/delete/{id}(home=${urlRoot}, id=${u.id})}" th:utext="#{tblusers.btn.delete}">Delete</a>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -200,8 +185,10 @@
 </div>
 
 
-<div class="myForm">
-    <form action="#" method="post" th:action="@{/save}">
+<div class="formEdit">
+    <form th:action="@{{home}/save(home=${urlRoot})}" th:object="${user}" th:method="post">
+<!--        <form class="w-25" th:action="@{${urlRoot}}" th:object="${user}" th:method="post">-->
+
         <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade"
              id="myModal" role="dialog"
              tabindex="-1">
@@ -217,17 +204,50 @@
                     </div>
                     <div class="modal-body">
                             <div class="form-group">
-                                <label class="col-form-label" for="idModal">ID:</label>
-                                <input class="form-control" id="idModal" name="idModal" type="text" value=""/>
+                                <label class="font-weight-bold" for="idEdit" th:utext="#{user.label.id}">ID</label>
+                                <input class="form-control form-control-sm" id="idEdit" name="idEdit" type="text" value="" disabled/>
                             </div>
                             <div class="form-group">
-                                <label class="col-form-label" for="nameModal">Name:</label>
-                                <input class="form-control" id="nameModal" name="nameModal" type="text" value=""/>
+                                <label class="font-weight-bold" for="nameEdit" th:utext="#{user.label.name}">Name</label>
+                                <input class="form-control form-control-sm" id="nameEdit" name="nameEdit" type="text" th:field="*{name}" th:placeholder="#{user.label.name}" />
                             </div>
 
+                        <div class="form-group">
+                            <label class="font-weight-bold" for="lastNameEdit" th:utext="#{user.label.lastName}">Lastname</label>
+                            <input class="form-control form-control-sm" id="lastNameEdit" type="text" th:field="*{lastName}" th:placeholder="#{user.label.lastName}" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="font-weight-bold" for="ageEdit" th:utext="#{user.label.age}">Age</label>
+                            <input class="form-control form-control-sm" id="ageEdit" type="number" th:field="*{age}" th:placeholder="#{user.label.age}" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="font-weight-bold" for="emailEdit" th:utext="#{user.label.email}">Email</label>
+                            <input class="form-control form-control-sm" id="emailEdit" type="email" th:field="*{email}" th:placeholder="#{user.label.email}" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="font-weight-bold" for="passwordEdit" th:utext="#{user.label.password}">Password</label>
+                            <input class="form-control form-control-sm" id="passwordEdit" type="password" th:field="*{password}" th:placeholder="#{user.label.password}" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="font-weight-bold" for="roleEdit" th:text="#{user.label.role}">Role</label>
+                            <select class="form-control" multiple id="roleEdit" th:field="*{enumRoles}" size="2">
+                                <!--    TODO почему не работает selectpicker в select?   -->
+                                <option th:each="role : ${T(jm.spring.bootstrap.entity.Roles).values()}"
+                                        th:value="${role}"
+                                        th:utext="${role}">
+                                </option>
+                            </select>
+                        </div>
 
 
-                    </div>
+
+
+
+                    </div> <!-- modal-body КОНЕЦ -->
 
                     <div class="modal-footer">
                         <button class="btn btn-secondary" data-dismiss="modal"
@@ -241,30 +261,9 @@
     </form>
 </div>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>это первое модальное окно exampleModal</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
-<!--<script th:src="@{/webjars/popper.js/umd/popper.js}"></script>-->
 <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 <script th:src="@{assets/bootstrap-select-1.13.14/dist/js/bootstrap-select.js}"></script>
 
@@ -285,20 +284,19 @@
 //пример с ютуба
     $(document).ready(function(){
 
-        $('.editBtn').on('click', function (event) {
+        $('.btnEdit').on('click', function (event) {
             event.preventDefault();
             var href = $(this).attr('href');
-
-            // alert("Ссылка = " + href);
-
-
             $.get(href, function (user, status) {
-
-                $('.myForm #idModal').val(user.id);
-                $('.myForm #nameModal').val(user.name);
-                // $('.myForm #capital').val(country.capital);
+                $('.formEdit #idEdit').val(user.id);
+                $('.formEdit #nameEdit').val(user.name);
+                $('.formEdit #lastNameEdit').val(user.lastName);
+                $('.formEdit #ageEdit').val(user.age);
+                $('.formEdit #emailEdit').val(user.email);
+                $('.formEdit #passwordEdit').val(user.password);
+                //$('.formEdit #roleEdit').val(user.);
             });
-            $('.myForm #myModal').modal("show");
+            $('.formEdit #myModal').modal("show");
         });
 
 

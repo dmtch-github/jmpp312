@@ -10,15 +10,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.*;
 
 @Repository
 public class UserDaoImp implements UserDao {
 
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private RoleRepository roleRepository;
+//    @Autowired
+//    private UserRepository userRepository;
+//    @Autowired
+//    private RoleRepository roleRepository;
+
+    @PersistenceContext
+    private EntityManager em;
+
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = getUserByName(username);
@@ -36,9 +42,12 @@ public class UserDaoImp implements UserDao {
 
     @Override
     public List<User> getUsers() {
-        List<User> users = userRepository.findAll();
+        List<User> users = em.createQuery("SELECT DISTINCT u FROM User u JOIN FETCH u.roles r",User.class)
+                .getResultList();
+        System.out.println("Длина списка " + users.size());
         for (User u: users) {
             u.rolesToEnum(); //преобразуем роли в текстовое описание
+            System.out.println(u);
         }
         System.out.println("Получил список всех юзеров");
         return users;
@@ -68,20 +77,25 @@ public class UserDaoImp implements UserDao {
         }
 
         user.setRoles(roles);
-        userRepository.save(user);
+        if(user.getId() == 0) {
+            em.persist(user);
+        } else {
+            em.merge(user);
+        }
     }
 
     @Override
     public void deleteUser(int id) {
-        userRepository.deleteById(id);
+        System.out.println("Буду удалять юзера с id=" + id);
+        User user = em.find(User.class, id);
+        System.out.println("Нашел юзера " + user);
+        em.remove(user);
     }
 
     @Override
     public User getUser(int id) {
-        User user = null;
-        Optional<User> optional = userRepository.findById(id);
-        if(optional.isPresent()) {
-            user = optional.get();
+        User user = em.find(User.class, id);
+        if(user != null) {
             user.rolesToEnum();
         }
         System.out.println("Взял из базы юзера " + user);
@@ -90,7 +104,12 @@ public class UserDaoImp implements UserDao {
 
     @Override
     public User getUserByName(String username) {
-        User user = userRepository.findUserByEmail(username);
+        String hqlRequest = "SELECT u FROM User u JOIN FETCH u.roles r WHERE email = :email";
+
+        List<User> list = em.createQuery(hqlRequest, User.class)
+                .setParameter("email", username)
+                .getResultList();
+        User user = list.isEmpty() ? null: list.get(0);
         if(user != null) {
             user.rolesToEnum();
         }
@@ -99,7 +118,11 @@ public class UserDaoImp implements UserDao {
 
 
     private Role getRoleByName(String rolename) {
-        return roleRepository.findRoleByName(rolename);
+        String hqlRequest = "FROM Role WHERE role = :role";
+        List<Role> list = em.createQuery(hqlRequest, Role.class)
+                .setParameter("role", rolename)
+                .getResultList();
+        return list.isEmpty() ? null: list.get(0);
     }
 
     /**
@@ -107,7 +130,9 @@ public class UserDaoImp implements UserDao {
      * Используется при создании временного администратора
      */
     private int getCountUsers() {
-        return (int) userRepository.count();
+        String hqlRequest = "SELECT COUNT(u) FROM User u";
+        List<Long> list = em.createQuery(hqlRequest,Long.class).getResultList();
+        return (int) (list.isEmpty()?0:list.get(0));
     }
 
 }

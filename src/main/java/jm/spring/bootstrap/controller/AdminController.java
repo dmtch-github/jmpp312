@@ -77,47 +77,24 @@ public class AdminController {
     @ResponseBody
     public User findOne(@PathVariable("id") int id) {
         System.out.println(">>>>>>>>>>> Запросил данные из БД для id=" + id);
-        User user = new User(1,"ddd@ttt", "ddname", "ttLast", (byte)33, "123", new HashSet<Role>());
-
-        return user; //userService.getUser(id);
+        return userService.getUser(id);
     }
-
-//    @GetMapping("/{tab}")
-//    public String tab(@PathVariable String tab, Model model) {
-//        model.addAttribute(NAME_URL_ROOT, URL_ROOT);
-//        switch(tab) {
-//            case "tab1":
-//                System.out.println("Зашел в таб1");
-//                model.addAttribute("listUsers", userService.getUsers());
-//
-//                return "_table-admin";
-//
-//            case "tab2":
-//                System.out.println("Зашел в таб2");
-//                model.addAttribute("user", new User());
-//                return "_new_user";
-//        }
-//        return "del_empty";
-//    }
-
 
     /**
      * Сохраняет данные пользователя в БД,
      * динамически меняет права авторизованного администратора
      * и перенаправляет на главную страницу
      */
-    @PostMapping(value = "", params = "save")
-    public String saveUser(@Valid @ModelAttribute("user") User user,
-                           BindingResult bindingResult) {
+    @PostMapping("/save")
+    public String saveUser(User user) {
 
         System.out.println("Зашел в saveUser " + user);
 
-        if(bindingResult.hasErrors()) {
-            //return "_new_user";
-            return COMMAND_REDIRECT + URL_ROOT + "/tab2";
-        }
+//        if(bindingResult.hasErrors()) {
+//            //return "_new_user";
+//            return COMMAND_REDIRECT + URL_ROOT + "/tab2";
+//        }
 
-        System.out.println("Прошел биндинг и вышел на редирект");
         userService.saveUser(user);
         //для текущего пользователя делаем динамическую авторизацию: смена прав
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -133,19 +110,14 @@ public class AdminController {
     }
 
 
-
-
-
-
     /**
      * Удаляет пользователя из БД и
      * перенаправляет на главную страницу
      */
-    @PostMapping(value = "/{id}", params = "delete")
-    public String deleteUser(ModelMap model,
-                             @PathVariable("id") int id) {
+    @GetMapping(value = "/delete/{id}")
+    public String deleteUser(@PathVariable("id") int id) {
         System.out.println("Зашел в УДаление Юзера");
-//        userService.deleteUser(id);
+        userService.deleteUser(id);
         return COMMAND_REDIRECT + URL_ROOT;
     }
 

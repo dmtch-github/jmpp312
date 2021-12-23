@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class UserServiceImp implements UserService {
         return userDao.loadUserByUsername(username);
     }
 
+    @Override
     public List<User> getUsers() {
         if(reloadUsers) {
             users = userDao.getUsers();
@@ -31,20 +33,26 @@ public class UserServiceImp implements UserService {
         return users;
     }
 
+    @Override
+    @Transactional
     public void saveUser(User user) {
         userDao.saveUser(user);
         reloadUsers = true;
     }
 
+    @Override
+    @Transactional
     public void deleteUser(int id) {
         userDao.deleteUser(id);
         reloadUsers = true;
     }
 
+    @Override
     public User getUser(int id) {
         return userDao.getUser(id);
     }
 
+    @Override
     public User getUserByName(String username) {
         return userDao.getUserByName(username);
     }

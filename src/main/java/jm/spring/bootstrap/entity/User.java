@@ -50,11 +50,10 @@ public class User implements UserDetails {
     private String password;
 
     @Transient
-    //@JsonIgnore
     private Roles[] enumRoles;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE},
-            fetch = FetchType.EAGER)
+            fetch = FetchType.LAZY)
     @JoinTable(name = "users242_roles242",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
