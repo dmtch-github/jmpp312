@@ -40,6 +40,7 @@ public class UserDaoImp implements UserDao {
         for (User u: users) {
             u.rolesToEnum(); //преобразуем роли в текстовое описание
         }
+        System.out.println("Получил список всех юзеров");
         return users;
     }
 
@@ -83,6 +84,7 @@ public class UserDaoImp implements UserDao {
             user = optional.get();
             user.rolesToEnum();
         }
+        System.out.println("Взял из базы юзера " + user);
         return user;
     }
 

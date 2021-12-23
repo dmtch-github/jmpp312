@@ -1,5 +1,6 @@
 package jm.spring.bootstrap.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jm.spring.bootstrap.entity.validate.SizeNotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,6 +50,7 @@ public class User implements UserDetails {
     private String password;
 
     @Transient
+    //@JsonIgnore
     private Roles[] enumRoles;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE},

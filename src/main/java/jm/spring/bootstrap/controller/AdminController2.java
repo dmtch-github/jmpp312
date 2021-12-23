@@ -20,14 +20,13 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/admin")
-public class AdminController {
+@RequestMapping("/admin2")
+public class AdminController2 {
 
     public static final String URL_ROOT = "/admin";
     private static final String NAME_URL_ROOT = "urlRoot";
@@ -35,7 +34,7 @@ public class AdminController {
     private final UserService userService;
 
     @Autowired
-    public AdminController(UserService userService) {
+    public AdminController2(UserService userService) {
         this.userService = userService;
     }
 
@@ -66,39 +65,28 @@ public class AdminController {
         String stringRoles = roles.stream().map(x -> x.replace(Roles.ROLE_PREFIX,"")).sorted().collect(Collectors.joining(" ","",""));
         model.addAttribute("stringRoles", stringRoles);
         model.addAttribute(NAME_URL_ROOT, URL_ROOT);
-        model.addAttribute("listUsers", userService.getUsers());
-        model.addAttribute("user", new User());
+//        model.addAttribute("listUsers", userService.getUsers());
         System.out.println("Зашел в индекс");
         return "admin";
     }
 
+    @GetMapping("/{tab}")
+    public String tab(@PathVariable String tab, Model model) {
+        model.addAttribute(NAME_URL_ROOT, URL_ROOT);
+        switch(tab) {
+            case "tab1":
+                System.out.println("Зашел в таб1");
+                model.addAttribute("listUsers", userService.getUsers());
 
-    @GetMapping("/findOne/{id}")
-    @ResponseBody
-    public User findOne(@PathVariable("id") int id) {
-        System.out.println(">>>>>>>>>>> Запросил данные из БД для id=" + id);
-        User user = new User(1,"ddd@ttt", "ddname", "ttLast", (byte)33, "123", new HashSet<Role>());
+                return "_table-admin";
 
-        return user; //userService.getUser(id);
+            case "tab2":
+                System.out.println("Зашел в таб2");
+                model.addAttribute("user", new User());
+                return "_new_user";
+        }
+        return "del_empty";
     }
-
-//    @GetMapping("/{tab}")
-//    public String tab(@PathVariable String tab, Model model) {
-//        model.addAttribute(NAME_URL_ROOT, URL_ROOT);
-//        switch(tab) {
-//            case "tab1":
-//                System.out.println("Зашел в таб1");
-//                model.addAttribute("listUsers", userService.getUsers());
-//
-//                return "_table-admin";
-//
-//            case "tab2":
-//                System.out.println("Зашел в таб2");
-//                model.addAttribute("user", new User());
-//                return "_new_user";
-//        }
-//        return "del_empty";
-//    }
 
 
     /**
