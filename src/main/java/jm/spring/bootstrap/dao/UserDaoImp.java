@@ -44,20 +44,17 @@ public class UserDaoImp implements UserDao {
     public List<User> getUsers() {
         List<User> users = em.createQuery("SELECT DISTINCT u FROM User u JOIN FETCH u.roles r",User.class)
                 .getResultList();
-        System.out.println("Длина списка " + users.size());
         for (User u: users) {
             u.rolesToEnum(); //преобразуем роли в текстовое описание
-            System.out.println(u);
         }
-        System.out.println("Получил список всех юзеров");
         return users;
     }
 
     @Override
     public void saveUser(User user) {
         String[] namesRole = Arrays.stream(user.getEnumRoles())
-            .map(Roles::toString)
             .filter(x -> x.equals(Roles.ADMIN) || x.equals(Roles.USER))
+            .map(Roles::toString)
             .distinct()
             .map(x -> Roles.ROLE_PREFIX+x)
             .toArray(String[]::new);
@@ -98,7 +95,6 @@ public class UserDaoImp implements UserDao {
         if(user != null) {
             user.rolesToEnum();
         }
-        System.out.println("Взял из базы юзера " + user);
         return user;
     }
 

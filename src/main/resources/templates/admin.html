@@ -69,6 +69,10 @@
                                     Label head
                                 </h4>
                             </div>
+                            <!-- Скрытый текстовый блок для модальных окон -->
+                            <input id="textEdit" type="hidden" th:value="#{tblusers.btn.edit}"/>
+                            <input id="titleEdit" type="hidden" th:value="#{modal.title.edit}"/>
+                            <input id="titleDelete" type="hidden" th:value="#{modal.title.delete}"/>
 
                             <div class="row bg-white">
                                 <div class="col-md-12 table-light">
@@ -102,7 +106,7 @@
                                                 <a class="btn btn-primary btnEdit" th:href="@{{home}/findOne/{id}(home=${urlRoot}, id=${u.id})}" th:utext="#{tblusers.btn.edit}">Edit</a>
                                             </td>
                                             <td>
-                                                <a class="btn btn-danger btnDelete" th:href="@{{home}/delete/{id}(home=${urlRoot}, id=${u.id})}" th:utext="#{tblusers.btn.delete}">Delete</a>
+                                                <a class="btn btn-danger btnDelete" th:href="@{{home}/findOne/{id}(home=${urlRoot}, id=${u.id})}" th:utext="#{tblusers.btn.delete}">Delete</a>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -125,7 +129,7 @@
 
                             <!-- начало ДАННЫЕ ПОЛЬЗОВАТЕЛЯ -->
                             <div class="row text-center justify-content-center bg-white">
-                                <form class="w-25" th:action="@{${urlRoot}}" th:object="${user}" th:method="post">
+                                <form class="w-25" th:action="@{{home}/save(home=${urlRoot})}" th:object="${user}" th:method="post">
                                     <input type="hidden" th:field="${user.id}"/>
 
                                     <div class="form-group">
@@ -169,7 +173,7 @@
                                         </select>
                                         <small id="roleHelp" class="form-text text-muted text-left">Ctrl - несколько ролей </small>
                                     </div>
-                                    <button type="submit" name="save" class="btn btn-success" th:inline="text">[[#{adduser.btn.add}]]</button>
+                                    <button class="btn btn-success" type="submit" th:inline="text">[[#{adduser.btn.add}]]</button>
                                 </form>
                             </div>
                             <!-- конец ДАННЫЕ ПОЛЬЗОВАТЕЛЯ -->
@@ -187,30 +191,32 @@
 
 <div class="formEdit">
     <form th:action="@{{home}/save(home=${urlRoot})}" th:object="${user}" th:method="post">
-<!--        <form class="w-25" th:action="@{${urlRoot}}" th:object="${user}" th:method="post">-->
+<!--        <form th:action="@{{home}/delete(home=${urlRoot})}" th:object="${user}" th:method="post">-->
 
-        <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade"
+        <!--        <form class="w-25" th:action="@{${urlRoot}}" th:object="${user}" th:method="post">-->
+
+        <div aria-hidden="true" aria-labelledby="myModalTitle" class="modal fade"
              id="myModal" role="dialog"
              tabindex="-1">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-sm" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="myModalLabel">Update or
-                            Create</h5>
+                        <h5 class="modal-title" id="myModalTitle">Title</h5>
                         <button aria-label="Close" class="close" data-dismiss="modal"
                                 type="button">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
-                            <div class="form-group">
-                                <label class="font-weight-bold" for="idEdit" th:utext="#{user.label.id}">ID</label>
-                                <input class="form-control form-control-sm" id="idEdit" name="idEdit" type="text" value="" disabled/>
-                            </div>
-                            <div class="form-group">
-                                <label class="font-weight-bold" for="nameEdit" th:utext="#{user.label.name}">Name</label>
-                                <input class="form-control form-control-sm" id="nameEdit" name="nameEdit" type="text" th:field="*{name}" th:placeholder="#{user.label.name}" />
-                            </div>
+                    <div class="modal-body text-center justify-content-center">
+                        <div class="form-group">
+                            <label class="font-weight-bold" for="idEdit" th:utext="#{user.label.id}">ID</label>
+                            <input class="form-control form-control-sm" id="idEdit" name="idEdit" type="text" value="" disabled/>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="font-weight-bold" for="nameEdit" th:utext="#{user.label.name}">Name</label>
+                            <input class="form-control form-control-sm" id="nameEdit" name="nameEdit" type="text" th:field="*{name}" th:placeholder="#{user.label.name}" />
+                        </div>
 
                         <div class="form-group">
                             <label class="font-weight-bold" for="lastNameEdit" th:utext="#{user.label.lastName}">Lastname</label>
@@ -227,7 +233,7 @@
                             <input class="form-control form-control-sm" id="emailEdit" type="email" th:field="*{email}" th:placeholder="#{user.label.email}" />
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" id="grpPassword">
                             <label class="font-weight-bold" for="passwordEdit" th:utext="#{user.label.password}">Password</label>
                             <input class="form-control form-control-sm" id="passwordEdit" type="password" th:field="*{password}" th:placeholder="#{user.label.password}" />
                         </div>
@@ -243,17 +249,15 @@
                             </select>
                         </div>
 
-
-
-
-
                     </div> <!-- modal-body КОНЕЦ -->
 
                     <div class="modal-footer">
                         <button class="btn btn-secondary" data-dismiss="modal"
                                 type="button">Close
                         </button>
-                        <input class="btn btn-primary" type="submit" value="save"/>
+                        <!-- Делаем на форме 2 кнопки и манипулируем видимостью из JS -->
+                        <input class="btn btn-primary" id="btnEditModal" type="submit"  th:value="#{tblusers.btn.edit}"/>
+                        <input class="btn btn-danger" id="btnDeleteModal" type="submit"  th:value="#{tblusers.btn.delete}"/>
                     </div>
                 </div>
             </div>
@@ -270,23 +274,12 @@
 
 
 <script>
-    //$('#myModal').modal(options)
-//    $('.myForm #myModal').modal(); из документации на модалки
-
-    //https://it-blog.ru/js/modalnoe-okno-bootstrap/#__JavaScript
-    // $(document).ready(function() {
-    //     $(".editBtn").click(function(){
-    //         $(".myForm #myModal").modal("show");
-    //     });
-    // });
-
-
-//пример с ютуба
     $(document).ready(function(){
 
-        $('.btnEdit').on('click', function (event) {
+        $('.btnDelete, .btnEdit').on('click', function (event) {
             event.preventDefault();
             var href = $(this).attr('href');
+            //загружаем данные о пользователе
             $.get(href, function (user, status) {
                 $('.formEdit #idEdit').val(user.id);
                 $('.formEdit #nameEdit').val(user.name);
@@ -296,32 +289,45 @@
                 $('.formEdit #passwordEdit').val(user.password);
                 //$('.formEdit #roleEdit').val(user.);
             });
+            //идентифицируем выполняемую операцию
+            var textThis = $(this).text(); //получим Edit или Delete
+            var textEdit = document.getElementById('textEdit').value;
+            if (textThis === textEdit) {
+                //редактирование
+                //установить заголовок
+                $('.formEdit #myModalTitle').text(document.getElementById('titleEdit').value);
+                //показать пароль
+                //document.getElementById('grpPassword')
+                $('.formEdit #grpPassword').hidden=false;
+                //разблокировать все инпуты
+                $('.formEdit #nameEdit').removeAttr('disabled');
+                $('.formEdit #lastNameEdit').removeAttr('disabled');
+                $('.formEdit #ageEdit').removeAttr('disabled');
+                $('.formEdit #emailEdit').removeAttr('disabled');
+                $('.formEdit #roleEdit').removeAttr('disabled');
+                //скрыть/показать кнопки
+                $('.formEdit #btnEditModal').attr({'type':'submit'});
+                $('.formEdit #btnDeleteModal').attr({'type':'hidden'});
+            } else {
+                //удаление
+                //установить заголовок
+                $('.formEdit #myModalTitle').text(document.getElementById('titleDelete').value);
+                //скрыть пароль
+                document.getElementById('grpPassword').hidden=true;
+                //заблокировать все инпуты
+                $('.formEdit #nameEdit').attr({'disabled':'disabled'});
+                $('.formEdit #lastNameEdit').attr({'disabled':'disabled'});
+                $('.formEdit #ageEdit').attr({'disabled':'disabled'});
+                $('.formEdit #emailEdit').attr({'disabled':'disabled'});
+                $('.formEdit #roleEdit').attr({'disabled':'disabled'});
+                //скрыть/показать кнопки
+                $('.formEdit #btnEditModal').attr({'type':'hidden'});
+                $('.formEdit #btnDeleteModal').attr({'type':'submit'});
+            }
+            //показываем форму
             $('.formEdit #myModal').modal("show");
         });
-
-
-
     });
-
-
-    // $('#myTabs a').click(function (e) {
-    //     e.preventDefault();
-    //
-    //     var url = $(this).attr("data-url");
-    //     var href = this.hash;
-    //     var pane = $(this);
-    //
-    //     // ajax load from data-url
-    //     $(href).load(url, function (result) {
-    //         pane.tab('show');
-    //     });
-    // });
-    //
-    // // load first tab content
-    // $('#tab1').load($('.nav-link.active').attr("data-url"), function (result) {
-    // });
-
-
 
 </script>
 

@@ -90,10 +90,10 @@ public class AdminController {
 
         System.out.println("Зашел в saveUser " + user);
 
-//        if(bindingResult.hasErrors()) {
-//            //return "_new_user";
-//            return COMMAND_REDIRECT + URL_ROOT + "/tab2";
-//        }
+        for( Roles role : user.getEnumRoles()) {
+            System.out.println("Роль " + role);
+        }
+
 
         userService.saveUser(user);
         //для текущего пользователя делаем динамическую авторизацию: смена прав
@@ -105,6 +105,8 @@ public class AdminController {
             List<GrantedAuthority> auths = getAuthorities(newRoles);
             Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(),auth.getCredentials(),auths);
             SecurityContextHolder.getContext().setAuthentication(newAuth);
+        } else {
+            System.out.println("Переавторизация не требуется!!!");
         }
         return COMMAND_REDIRECT + URL_ROOT;
     }
