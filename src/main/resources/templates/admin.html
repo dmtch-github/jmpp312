@@ -190,7 +190,7 @@
 
 
 <div class="formEdit">
-    <form th:action="@{{home}/save(home=${urlRoot})}" th:object="${user}" th:method="post">
+    <form id="formModal" th:action="@{{home}/delete/6(home=${urlRoot})}" th:object="${user}" th:method="get">
 <!--        <form th:action="@{{home}/delete(home=${urlRoot})}" th:object="${user}" th:method="post">-->
 
         <!--        <form class="w-25" th:action="@{${urlRoot}}" th:object="${user}" th:method="post">-->
@@ -209,6 +209,7 @@
                     </div>
                     <div class="modal-body text-center justify-content-center">
                         <div class="form-group">
+                            <input id="idValue" type="hidden" th:field="*{id}"/>
                             <label class="font-weight-bold" for="idEdit" th:utext="#{user.label.id}">ID</label>
                             <input class="form-control form-control-sm" id="idEdit" name="idEdit" type="text" value="" disabled/>
                         </div>
@@ -258,6 +259,7 @@
                         <!-- Делаем на форме 2 кнопки и манипулируем видимостью из JS -->
                         <input class="btn btn-primary" id="btnEditModal" type="submit"  th:value="#{tblusers.btn.edit}"/>
                         <input class="btn btn-danger" id="btnDeleteModal" type="submit"  th:value="#{tblusers.btn.delete}"/>
+<!--                        <a class="btn btn-danger" href="" id="btnDeleteModal" th:utext="#{tblusers.btn.delete}">Delete</a>-->
                     </div>
                 </div>
             </div>
@@ -282,6 +284,7 @@
             //загружаем данные о пользователе
             $.get(href, function (user, status) {
                 $('.formEdit #idEdit').val(user.id);
+                $('.formEdit #idValue').val(user.id);
                 $('.formEdit #nameEdit').val(user.name);
                 $('.formEdit #lastNameEdit').val(user.lastName);
                 $('.formEdit #ageEdit').val(user.age);
@@ -308,6 +311,15 @@
                 //скрыть/показать кнопки
                 $('.formEdit #btnEditModal').attr({'type':'submit'});
                 $('.formEdit #btnDeleteModal').attr({'type':'hidden'});
+                //меняем у form аттрибуты action и method
+                var i = href.lastIndexOf('/');
+                if(i > 0) {
+                    var path = href.substring(0,i);
+                    var newHref = path.replace('findOne','save');
+                    $('.formEdit #formModal').attr({'action':newHref});
+                    $('.formEdit #formModal').attr({'method':'post'});
+                    // $('.formEdit #formModal').attr('method','post');
+                }
             } else {
                 //удаление
                 //установить заголовок
@@ -323,6 +335,10 @@
                 //скрыть/показать кнопки
                 $('.formEdit #btnEditModal').attr({'type':'hidden'});
                 $('.formEdit #btnDeleteModal').attr({'type':'submit'});
+                //меняем у form аттрибуты action и method
+                var newHref = href.replace('findOne','delete');
+                $('.formEdit #formModal').attr({'action':newHref});
+                $('.formEdit #formModal').attr({'method':'get'});
             }
             //показываем форму
             $('.formEdit #myModal').modal("show");

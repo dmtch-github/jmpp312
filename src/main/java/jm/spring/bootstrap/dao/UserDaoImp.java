@@ -74,9 +74,15 @@ public class UserDaoImp implements UserDao {
         }
 
         user.setRoles(roles);
+
+
+        System.out.println("=======\nБуду сохранять юзера " + user);
+
         if(user.getId() == 0) {
+            System.out.println("==== persist");
             em.persist(user);
         } else {
+            System.out.println("==== merge");
             em.merge(user);
         }
     }
