@@ -3,7 +3,6 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-<!--    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />-->
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -33,8 +32,6 @@
         <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical" sec:authorize="isAuthenticated()">
             <a class="nav-link" role="tab" sec:authorize="hasRole('ADMIN')" th:href="@{/admin}">ADMIN</a>
             <a class="nav-link active" role="tab" th:href="@{/user}">USER</a>
-            <!--            <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Home</a>-->
-            <!--            <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Profile</a>-->
         </div>
     </div>
     <!-- конец ВЕРТИКАЛЬНАЯ КОЛОНКА -->
@@ -43,7 +40,7 @@
     <div class="col bg-light">
         <h2 class="row mt-3 pl-3" th:utext="#{panel.title.user}">User information</h2>
 
-        <table class="table table-bordered table-success" id="table-master" style="width: 99%;">
+        <table class="table table-bordered table-success" id="table-master" style="width: 99%;" aria-describedby="tableMaster">
             <thead class="thead-light">
                 <tr>
                     <th scope="col">
@@ -58,7 +55,7 @@
                 <tr class="table-light">
                     <td>
                         <!-- Таблица пользователя -->
-                        <table class="table table-striped" id="table-user">
+                        <table class="table table-striped" id="table-user" aria-describedby="tableUser">
                             <thead>
                             <tr>
                                 <th scope="col" id="id" th:utext="#{user.label.id}">id</th>

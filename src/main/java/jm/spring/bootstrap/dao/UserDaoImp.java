@@ -3,9 +3,6 @@ package jm.spring.bootstrap.dao;
 import jm.spring.bootstrap.entity.Role;
 import jm.spring.bootstrap.entity.Roles;
 import jm.spring.bootstrap.entity.User;
-import jm.spring.bootstrap.repository.RoleRepository;
-import jm.spring.bootstrap.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
@@ -17,14 +14,8 @@ import java.util.*;
 @Repository
 public class UserDaoImp implements UserDao {
 
-//    @Autowired
-//    private UserRepository userRepository;
-//    @Autowired
-//    private RoleRepository roleRepository;
-
     @PersistenceContext
     private EntityManager em;
-
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = getUserByName(username);
@@ -75,24 +66,16 @@ public class UserDaoImp implements UserDao {
 
         user.setRoles(roles);
 
-
-        System.out.println("=======\nБуду сохранять юзера " + user);
-
         if(user.getId() == 0) {
-            System.out.println("==== persist");
             em.persist(user);
         } else {
-            System.out.println("==== merge");
             em.merge(user);
         }
     }
 
     @Override
     public void deleteUser(int id) {
-        System.out.println("Буду удалять юзера с id=" + id);
-        User user = em.find(User.class, id);
-        System.out.println("Нашел юзера " + user);
-        em.remove(user);
+        em.remove(em.find(User.class, id));
     }
 
     @Override

@@ -3,7 +3,6 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-<!--    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />-->
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -34,8 +33,6 @@
         <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical" sec:authorize="isAuthenticated()">
             <a class="nav-link active" role="tab" th:href="@{/admin}">ADMIN</a>
             <a class="nav-link" role="tab" sec:authorize="hasRole('USER')" th:href="@{/user}">USER</a>
-<!--            <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Home</a>-->
-<!--            <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Profile</a>-->
         </div>
     </div>
         <!-- конец ВЕРТИКАЛЬНАЯ КОЛОНКА -->
@@ -76,7 +73,7 @@
 
                             <div class="row bg-white">
                                 <div class="col-md-12 table-light">
-                                    <table class="table table-striped">
+                                    <table class="table table-striped" aria-describedby="listUsers">
                                         <thead>
                                         <tr>
                                             <th id="id" th:utext="#{user.label.id}">Name</th>
@@ -165,13 +162,12 @@
                                     <div class="form-group">
                                         <label for="selectRole" class="font-weight-bold">Role</label>
                                         <select multiple id="selectRole" class="form-control" th:field="*{enumRoles}" size="2" aria-describedby="roleHelp">
-                                            <!--    TODO почему не работает selectpicker в select?   -->
                                             <option th:each="role : ${T(jm.spring.bootstrap.entity.Roles).values()}"
                                                     th:value="${role}"
-                                                    th:utext="${role}"> Как сделать активной строку в зависимости от имеющейся роли
+                                                    th:utext="${role}"> Как сделать активной строку в зависимости от имеющейся роли и не работает selectpicker
                                             </option>
                                         </select>
-                                        <small id="roleHelp" class="form-text text-muted text-left">Ctrl - несколько ролей </small>
+                                        <small id="roleHelp" class="form-text text-muted text-left" th:utext="#{adduser.roles.hint}">Ctrl+</small>
                                     </div>
                                     <button class="btn btn-success" type="submit" th:inline="text">[[#{adduser.btn.add}]]</button>
                                 </form>
@@ -190,11 +186,7 @@
 
 
 <div class="formEdit">
-    <form id="formModal" th:action="@{{home}/delete/6(home=${urlRoot})}" th:object="${user}" th:method="get">
-<!--        <form th:action="@{{home}/delete(home=${urlRoot})}" th:object="${user}" th:method="post">-->
-
-        <!--        <form class="w-25" th:action="@{${urlRoot}}" th:object="${user}" th:method="post">-->
-
+    <form id="formModal" th:action="@{{home}/save(home=${urlRoot})}" th:object="${user}" th:method="post">
         <div aria-hidden="true" aria-labelledby="myModalTitle" class="modal fade"
              id="myModal" role="dialog"
              tabindex="-1">
@@ -231,7 +223,7 @@
 
                         <div class="form-group">
                             <label class="font-weight-bold" for="emailEdit" th:utext="#{user.label.email}">Email</label>
-                            <input class="form-control form-control-sm" id="emailEdit" type="email" th:field="*{email}" th:placeholder="#{user.label.email}" />
+                            <input class="form-control form-control-sm" id="emailEdit" type="text" th:field="*{email}" th:placeholder="#{user.label.email}" />
                         </div>
 
                         <div class="form-group" id="grpPassword">
@@ -242,7 +234,6 @@
                         <div class="form-group">
                             <label class="font-weight-bold" for="roleEdit" th:text="#{user.label.role}">Role</label>
                             <select class="form-control" multiple id="roleEdit" th:field="*{enumRoles}" size="2">
-                                <!--    TODO почему не работает selectpicker в select?   -->
                                 <option th:each="role : ${T(jm.spring.bootstrap.entity.Roles).values()}"
                                         th:value="${role}"
                                         th:utext="${role}">
@@ -259,7 +250,6 @@
                         <!-- Делаем на форме 2 кнопки и манипулируем видимостью из JS -->
                         <input class="btn btn-primary" id="btnEditModal" type="submit"  th:value="#{tblusers.btn.edit}"/>
                         <input class="btn btn-danger" id="btnDeleteModal" type="submit"  th:value="#{tblusers.btn.delete}"/>
-<!--                        <a class="btn btn-danger" href="" id="btnDeleteModal" th:utext="#{tblusers.btn.delete}">Delete</a>-->
                     </div>
                 </div>
             </div>
@@ -267,13 +257,10 @@
     </form>
 </div>
 
-
 <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 <script th:src="@{assets/bootstrap-select-1.13.14/dist/js/bootstrap-select.js}"></script>
-
-
 
 <script>
     $(document).ready(function(){
