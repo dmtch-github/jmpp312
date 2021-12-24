@@ -287,8 +287,8 @@
                 //установить заголовок
                 $('.formEdit #myModalTitle').text(document.getElementById('titleEdit').value);
                 //показать пароль
-                //document.getElementById('grpPassword')
-                $('.formEdit #grpPassword').hidden=false;
+                $('.formEdit #passwordEdit').removeAttr('disabled');
+                document.getElementById('grpPassword').hidden=false;
                 //разблокировать все инпуты
                 $('.formEdit #nameEdit').removeAttr('disabled');
                 $('.formEdit #lastNameEdit').removeAttr('disabled');
@@ -312,6 +312,7 @@
                 //установить заголовок
                 $('.formEdit #myModalTitle').text(document.getElementById('titleDelete').value);
                 //скрыть пароль
+                $('.formEdit #passwordEdit').attr({'disabled':'disabled'});
                 document.getElementById('grpPassword').hidden=true;
                 //заблокировать все инпуты
                 $('.formEdit #nameEdit').attr({'disabled':'disabled'});
